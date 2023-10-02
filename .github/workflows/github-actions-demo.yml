@@ -1,11 +1,11 @@
-  name: ESLint
+  name: Test_gendiff
 
   on:
   - push
   - pull_request
 
-jobs:
-  build:
+  jobs:
+   build:
     runs-on: ubuntu-latest
 
     steps:
