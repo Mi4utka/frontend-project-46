@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1696432429735" clover="3.2.0">
-  <project timestamp="1696432429735" name="All files">
+<coverage generated="1696433797918" clover="3.2.0">
+  <project timestamp="1696433797918" name="All files">
     <metrics statements="18" coveredstatements="18" conditionals="10" coveredconditionals="10" methods="5" coveredmethods="5" elements="33" coveredelements="33" complexity="0" loc="18" ncloc="18" packages="1" files="3" classes="3"/>
     <file name="getDiff.js" path="C:\Users\Admin\OneDrive\Рабочий стол\frontend-project-46-1\src\getDiff.js">
       <metrics statements="15" coveredstatements="15" conditionals="10" coveredconditionals="10" methods="2" coveredmethods="2"/>

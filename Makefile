@@ -5,6 +5,6 @@ install:
 publish:
 	npm publish --dry-run
 lintfix:
-	npx eslint . --fix
+	npx eslint --fix .
 test-coverage:   	
 	npm test -- --coverage --coverageProvider=v8
