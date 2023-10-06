@@ -1,13 +1,12 @@
 import _ from 'lodash';
 
 const get = (data1, data2) => {
-  
-    const keys1 = Object.keys(data1);
-    const keys2 = Object.keys(data2);
+  const iter = (obj1, obj2, depth) => {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
     let keys = _.union(keys1, keys2);
     keys = _.sortBy(keys);
     const sep = ' ';
-    const iter = (obj1, obj2, depth) => {
     const getStr = keys.map((key) => {
       if (_.has(obj1, key) && _.has(obj2, key)) {
         if (obj1[key] === obj2[key]) {
@@ -18,10 +17,10 @@ const get = (data1, data2) => {
         return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}\n${sep.repeat(depth * 4 - 2)} + ${key}: ${obj2[key]}`;
       } if (_.has(obj1, key) && (!_.has(obj2, key))) {
         if (_.isObject(obj1[key]))
-        {(}
+        {return infi(key, obj1[key], depth, sep)}
         return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}`;
 
-      } if (_.isObject(obj2[key])) {} 
+      } if (_.isObject(obj2[key])){ return infi(key,obj2[key], depth, sep) ;} 
       return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}`;
     });
 
