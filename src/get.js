@@ -1,5 +1,13 @@
 import _ from 'lodash';
 
+const recur = (obj, depth, sep) => {
+  const fin = Object.keys(obj).map((key) => {
+    if (!_.isObject(key)) {return `${sep.repeat(depth * 4)}${key}: ${obj[key]}`}
+    return recur(key, depth + 1, sep);
+  });
+  return fin
+ 
+}
 const get = (data1, data2) => {
   const iter = (obj1, obj2, depth) => {
     const keys1 = Object.keys(obj1);
@@ -9,19 +17,27 @@ const get = (data1, data2) => {
     const sep = ' ';
     const getStr = keys.map((key) => {
       if (_.has(obj1, key) && _.has(obj2, key)) {
-        if (obj1[key] === obj2[key]) {
+        if (_.isEqual(obj1[key], obj2[key])) {
           return `${sep.repeat(depth * 4)}${key}: ${obj1[key]}`;
         }
         if (_.isObject(obj1[key]) && _.isObject(obj2[key]))
         { return iter(obj1[key], obj2[key], depth + 1) };
         return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}\n${sep.repeat(depth * 4 - 2)} + ${key}: ${obj2[key]}`;
       } if (_.has(obj1, key) && (!_.has(obj2, key))) {
-        if (_.isObject(obj1[key]))
-        {return infi(key, obj1[key], depth, sep)}
+        if (_.isObject(obj1[key])) {
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: {${recur(obj1[key], depth + 1, ' ')}}` 
+        }
+       
         return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}`;
 
-      } if (_.isObject(obj2[key])){ return infi(key,obj2[key], depth, sep) ;} 
-      return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}`;
+      } 
+      if (!_.has(obj1, key) && (_.has(obj2, key))) {
+        if (_.isObject(obj2[key])) {
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: ${recur(obj2[key], depth + 1, ' ')}`
+
+        }
+      return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}` 
+    };
     });
 
     return `{\n  ${getStr.join('\n  ')}\n}`;
