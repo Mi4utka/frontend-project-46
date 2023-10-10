@@ -2,12 +2,11 @@ import _ from 'lodash';
 
 const recur = (obj, depth, sep) => {
   const fin = Object.keys(obj).map((key) => {
-    if (!_.isObject(key)) {return `${sep.repeat(depth * 4)}${key}: ${obj[key]}`}
+    if (!_.isObject(key)) { return `${sep.repeat(depth * 4)}${key}: ${obj[key]}`; }
     return recur(key, depth + 1, sep);
   });
-  return fin
- 
-}
+  return fin;
+};
 const get = (data1, data2) => {
   const iter = (obj1, obj2, depth) => {
     const keys1 = Object.keys(obj1);
@@ -20,24 +19,23 @@ const get = (data1, data2) => {
         if (_.isEqual(obj1[key], obj2[key])) {
           return `${sep.repeat(depth * 4)}${key}: ${obj1[key]}`;
         }
-        if (_.isObject(obj1[key]) && _.isObject(obj2[key]))
-        { return iter(obj1[key], obj2[key], depth + 1) };
+        if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+          return iter(obj1[key], obj2[key], depth + 1);
+        }
         return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}\n${sep.repeat(depth * 4 - 2)} + ${key}: ${obj2[key]}`;
       } if (_.has(obj1, key) && (!_.has(obj2, key))) {
         if (_.isObject(obj1[key])) {
-          return `${sep.repeat(depth * 4 - 2)}- ${key}: {${recur(obj1[key], depth + 1, ' ')}}` 
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: {${recur(obj1[key], depth + 1, ' ')}}`;
         }
-       
-        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}`;
 
-      } 
+        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}`;
+      }
       if (!_.has(obj1, key) && (_.has(obj2, key))) {
         if (_.isObject(obj2[key])) {
-          return `${sep.repeat(depth * 4 - 2)}- ${key}: ${recur(obj2[key], depth + 1, ' ')}`
-
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: ${recur(obj2[key], depth + 1, ' ')}`;
         }
-      return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}` 
-    };
+        return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}`;
+      }
     });
 
     return `{\n  ${getStr.join('\n  ')}\n}`;
@@ -47,58 +45,58 @@ const get = (data1, data2) => {
 };
 
 console.log(get({
-    "common": {
-      "setting1": "Value 1",
-      "setting2": 200,
-      "setting3": true,
-      "setting6": {
-        "key": "value",
-        "doge": {
-          "wow": ""
-        }
-      }
-    },
-    "group1": {
-      "baz": "bas",
-      "foo": "bar",
-      "nest": {
-        "key": "value"
-      }
-    },
-    "group2": {
-      "abc": 12345,
-      "deep": {
-        "id": 45
-      }
-    }
-  }, {
-    "common": {
-      "follow": false,
-      "setting1": "Value 1",
-      "setting3": null,
-      "setting4": "blah blah",
-      "setting5": {
-        "key5": "value5"
+  common: {
+    setting1: 'Value 1',
+    setting2: 200,
+    setting3: true,
+    setting6: {
+      key: 'value',
+      doge: {
+        wow: '',
       },
-      "setting6": {
-        "key": "value",
-        "ops": "vops",
-        "doge": {
-          "wow": "so much"
-        }
-      }
     },
-    "group1": {
-      "foo": "bar",
-      "baz": "bars",
-      "nest": "str"
+  },
+  group1: {
+    baz: 'bas',
+    foo: 'bar',
+    nest: {
+      key: 'value',
     },
-    "group3": {
-      "deep": {
-        "id": {
-          "number": 45
-        }
+  },
+  group2: {
+    abc: 12345,
+    deep: {
+      id: 45,
+    },
+  },
+}, {
+  common: {
+    follow: false,
+    setting1: 'Value 1',
+    setting3: null,
+    setting4: 'blah blah',
+    setting5: {
+      key5: 'value5',
+    },
+    setting6: {
+      key: 'value',
+      ops: 'vops',
+      doge: {
+        wow: 'so much',
       },
-      "fee": 100500
-    }
-  }));
+    },
+  },
+  group1: {
+    foo: 'bar',
+    baz: 'bars',
+    nest: 'str',
+  },
+  group3: {
+    deep: {
+      id: {
+        number: 45,
+      },
+    },
+    fee: 100500,
+  },
+}));
