@@ -1,16 +1,8 @@
 import _ from 'lodash';
+import getDiffTree from './getDiff.js';
+import toStylish from './stylish.js';
 
-const getg = (data1, data2) => {
-  const iter = (obj1, obj2, depth) => {
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
-    let keys = _.union(keys1, keys2);
-    keys = _.sortBy(keys);
-    return keys.map((key) => `${key}: ${obj1[key]}`);
-  };
-  return iter(data1, data2, 1);
-};
-console.log(getg({
+console.log(toStylish(getDiffTree({
   common: {
     setting1: 'Value 1',
     setting2: 200,
@@ -65,4 +57,4 @@ console.log(getg({
     },
     fee: 100500,
   },
-}));
+})));

@@ -1,11 +1,19 @@
 import _ from 'lodash';
 
-const recur = (obj, depth, sep) => {
-  const fin = Object.keys(obj).map((key) => {
-    if (!_.isObject(key)) { return `${sep.repeat(depth * 4)}${key}: ${obj[key]}`; }
-    return recur(key, depth + 1, sep);
-  });
-  return fin;
+const getCurrentIndent = (depth, intend = 4) => ' '.repeat(intend * depth - 2);
+const getClosingIndent = (depth, intend = 4) => ' '.repeat(intend * depth - intend);
+
+const thisValueToString = (thisValue, depth = 1) => {
+  const iter = (value, depthIter) => {
+    if (!_.isObject(value)) {
+      return `${value}`;
+    }
+    const valueEntries = Object.entries(value);
+    const valuemapped = valueEntries.map(([key, val]) => `${getCurrentIndent(depthIter)}${key}: ${iter(val, depthIter + 1)}`);
+
+    return ['{', ...valuemapped, `${getClosingIndent(depthIter)}`, '}'].join('\n');
+  };
+  return iter(thisValue, depth);
 };
 const get = (data1, data2) => {
   const iter = (obj1, obj2, depth) => {
@@ -17,24 +25,24 @@ const get = (data1, data2) => {
     const getStr = keys.map((key) => {
       if (_.has(obj1, key) && _.has(obj2, key)) {
         if (_.isEqual(obj1[key], obj2[key])) {
-          return `${sep.repeat(depth * 4)}${key}: ${obj1[key]}`;
+          return `${sep.repeat(depth * 4)}${key}: ${thisValueToString(obj1[key], depth + 1)}`;
         }
         if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
           return iter(obj1[key], obj2[key], depth + 1);
         }
-        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}\n${sep.repeat(depth * 4 - 2)} + ${key}: ${obj2[key]}`;
+        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}\n${sep.repeat(depth * 4 - 2)} + ${key}: ${thisValueToString(obj2[key], depth + 1)}`;
       } if (_.has(obj1, key) && (!_.has(obj2, key))) {
         if (_.isObject(obj1[key])) {
-          return `${sep.repeat(depth * 4 - 2)}- ${key}: {${recur(obj1[key], depth + 1, ' ')}}`;
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: {${(thisValueToString(obj1[key], depth + 1))}}`;
         }
 
-        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${obj1[key]}`;
+        return `${sep.repeat(depth * 4 - 2)}- ${key}: ${thisValueToString(obj1[key], depth + 1)}`;
       }
       if (!_.has(obj1, key) && (_.has(obj2, key))) {
         if (_.isObject(obj2[key])) {
-          return `${sep.repeat(depth * 4 - 2)}- ${key}: ${recur(obj2[key], depth + 1, ' ')}`;
+          return `${sep.repeat(depth * 4 - 2)}- ${key}: ${thisValueToString(obj2[key], depth + 1)}`;
         }
-        return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${obj2[key]}`;
+        return `${sep.repeat(depth * 4 - 2)}+ ${key}: ${thisValueToString(obj2[key], depth + 1)}`;
       }
     });
 
