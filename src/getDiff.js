@@ -24,6 +24,5 @@ const getDiffTree = (obj1, obj2) => {
     };
   });
   return getTree;
-}
-export default getDiffTree
- 
+};
+export default getDiffTree;
