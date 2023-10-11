@@ -2,6 +2,7 @@ import getDiffTree from './getDiff.js';
 import getParse from '../parsers/parser.js';
 import toStylish from './formatters/stylish.js';
 import toPlain from './formatters/plain.js';
+import toJson from './formatters/json.js';
 
 const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const tree = getDiffTree(getParse(filepath1), getParse(filepath2));
@@ -11,7 +12,10 @@ const genDiff = (filepath1, filepath2, format = 'stylish') => {
   if (format === 'plain') {
     return toPlain(tree);
   }
-  return 'f';
+  if (format === 'json') {
+    return toJson(tree);
+  }
+  return null;
 };
 
 export default genDiff;
